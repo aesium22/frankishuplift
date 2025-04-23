@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frankish Uplift CYOA</title>
+    <style>
+        body {
+            font-family: 'Bookman Old Style', Georgia, serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f1e8;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            border-radius: 5px;
+        }
+        header {
+            background-color: #3e2723;
+            color: #f5f1e8;
+            padding: 20px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+            margin-bottom: 20px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        h2 {
+            color: #5d4037;
+            border-bottom: 2px solid #5d4037;
+            padding-bottom: 5px;
+        }
+        .introduction {
+            font-style: italic;
+            background-color: #efe8d9;
+            padding: 15px;
+            border-left: 5px solid #8d6e63;
+            margin-bottom: 20px;
+        }
+        .section {
+            margin-bottom: 30px;
+        }
+        .choice-category {
+            margin-bottom: 20px;
+        }
+        .choice {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #f9f6f0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+        }
+        .choice:hover {
+            background-color: #efe8d9;
+        }
+        .choice input {
+            margin-right: 10px;
+        }
+        .choice-details {
+            flex-grow: 1;
+        }
+        .choice-title {
+            font-weight: bold;
+        }
+        .choice-description {
+            font-size: 0.9em;
+            color: #555;
+        }
+        .choice-cost {
+            font-weight: bold;
+            color: #5d4037;
+            margin-left: 10px;
+        }
+        .points-display {
+            position: sticky;
+            top: 10px;
+            background-color: #5d4037;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 100;
+        }
+        .ally {
+            border: 1px solid #8d6e63;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #f9f6f0;
+        }
+        .ally-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .ally-name {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        .ally-location {
+            font-style: italic;
+            color: #5d4037;
+        }
+        .ally-details {
+            margin-top: 10px;
+        }
+        .ally-label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .summary {
+            background-color: #efe8d9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .summary h3 {
+            margin-top: 0;
+            color: #5d4037;
+        }
+        .summary-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .summary-list li {
+            padding: 5px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+        button {
+            background-color: #5d4037;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1em;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #3e2723;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            background-color: #ddd;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab.active {
+            background-color: #5d4037;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .map {
+            width: 100%;
+            height: 300px;
+            background-color: #efe8d9;
+            border: 1px solid #8d6e63;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #5d4037;
+        }
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            font-size: 0.8em;
+            color: #777;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            header {
+                padding: 15px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Frankish Uplift</h1>
+            <p>Choose Your Destiny in 550 AD</p>
+        </header>
+
+        <div class="introduction">
+            <p>You blink and find yourself on a grassy, windswept hill overlooking the northern Atlantic sea. A magical interface appears before you with a list of options.</p>
+            <p>Welcome to the Kingdom of the Francs. The date is 550 AD. Known as one of the few times civilization regressed, the trifecta of famine, disease, and roving tribes have destroyed the Western Roman Empire. After the volcanic eruptions of 536 blocked out the sun and plunged the world in famine, the plague of Justinian wiped out 40% of the remaining population in the resulting chaos.</p>
+            <p>The political situation is also tumultuous—despite King Chlothar 'the old' defeating his brothers and unifying the Kingdom of the Francs, he is ailing and his sons are scheming for control. The Catholic Church is split between the Nicene orthodoxy and Arianism, with much zealous preaching of end-times.</p>
+            <p>Your Herculean task is to stop the decline, restart the engine of progress, and uplift society. To do this, you are granted a number of supernatural skills.</p>
+            <p>You start on the coast near Rouen.</p>
+        </div>
+
+        <div class="points-display">
+            <div id="points-available">Points Available: 20</div>
+            <div id="points-spent">Points Spent: 0</div>
+            <div id="challenges-points">Challenge Points: 0</div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'benefits')">Benefits</button>
+            <button class="tab" onclick="openTab(event, 'knowledge')">Knowledge</button>
+            <button class="tab" onclick="openTab(event, 'skills')">Skills</button>
+            <button class="tab" onclick="openTab(event, 'challenges')">Challenges</button>
+            <button class="tab" onclick="openTab(event, 'allies')">Allies</button>
+            <button class="tab" onclick="openTab(event, 'summary')">Summary</button>
+        </div>
+
+        <div id="benefits" class="tab-content active">
+            <div class="section">
+                <h2>Immediate Benefits</h2>
+                <p>Make your introduction into the past easier</p>
+                
+                <div class="choice-category">
+                    <div class="choice">
+                        <input type="checkbox" id="allspeak" value="1" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">All-speak</div>
+                            <div class="choice-description">Know all languages by default</div>
+                        </div>
+                        <div class="choice-cost">1 Point</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="carryalong" value="1" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Carry-along</div>
+                            <div class="choice-description">Brought your backpack with 3 books of your choice in it</div>
+                        </div>
+                        <div class="choice-cost">1 Point</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="nothungry" value="1" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Not hungry</div>
+                            <div class="choice-description">You need to eat and drink 1/4 of normal to be satiated</div>
+                        </div>
+                        <div class="choice-cost">1 Point</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="medkit" value="1" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Med-kit</div>
+                            <div class="choice-description">Contains a full set of first aid and first response items</div>
+                        </div>
+                        <div class="choice-cost">1 Point</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="liveinabox" value="1" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">I live in a box</div>
+                            <div class="choice-description">You arrive inside a storage container full of IKEA furnishings of your choice</div>
+                        </div>
+                        <div class="choice-cost">1 Point</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="armed" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Armed</div>
+                            <div class="choice-description">You arrive with Kevlar armor and a pistol. 12 rounds of ammo only.</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="overyonder" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Over yonder</div>
+                            <div class="choice-description">Although you may act and look different to locals, they will assume you are from a nearby city by default</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="inflation" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Inflation helps</div>
+                            <div class="choice-description">Coverts your pocket change to the local currency. Gives you the equivalent of $50,000 in cash to spend</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="guide" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Guide</div>
+                            <div class="choice-description">A friendly local shepherd who will take you in until you get on your feet</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="knowledge" class="tab-content">
+            <div class="section">
+                <h2>Modern Knowledge</h2>
+                <p>With perfect clarity, you have modern knowledge of a topic</p>
+                
+                <div class="choice-category">
+                    <div class="choice">
+                        <input type="checkbox" id="medicine" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Medicine</div>
+                            <div class="choice-description">Theories of sanitation, germs, diseases, hygiene, and allergies. Also history of penicillin, aspirin, lidocaine, forceps, pasteurization, and surgery.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="communication" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Communication</div>
+                            <div class="choice-description">Semaphore (flag signaling), telegraph, radio, phones, printing press, typewriter, and photography.</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="navigation" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Navigation</div>
+                            <div class="choice-description">Telescope, sextant, compass, caravel, propeller, bicycle, tires, air balloon, principles of flight, and clocks.</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="industry" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Industry</div>
+                            <div class="choice-description">Cement, steel, machine tools, engines, valves, electric motor, sowing machine, plastic, rubber, and lightbulbs.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="agriculture" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Agriculture</div>
+                            <div class="choice-description">Fertilizer, crop rotation, seed drill, plow, tractor, pesticides, plant cross-breeding techniques, irrigation and erosion techniques.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="military" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Military</div>
+                            <div class="choice-description">Dynamite, gunpowder, revolver, cannon, rifle, artillery, military tactics and logistics, and fortification techniques.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="financial" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Financial</div>
+                            <div class="choice-description">Double entry accounting, stocks/capital raises, bonds, shared liability, loans, credit, and monetary theory.</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="academic" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Academic</div>
+                            <div class="choice-description">Summaries of findings in physics, math, chemistry, biology, and political science.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="skills" class="tab-content">
+            <div class="section">
+                <h2>Supernatural Skills</h2>
+                
+                <div class="choice-category">
+                    <div class="choice">
+                        <input type="checkbox" id="firstknight" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">The first knight</div>
+                            <div class="choice-description">You have the skills of a trained knight—skilled in swordsmanship, archery, and horse riding. Comes with a trained warhorse.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="strength" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Strength in dark times</div>
+                            <div class="choice-description">You gain superhuman endurance, able to march all day. You need just three hours of sleep to be fully refreshed.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="manyfaces" value="5" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Many faces</div>
+                            <div class="choice-description">You can pick ten human appearances to switch between. This is a true transformation. Be warned, doing this is public is a good way to be accused of being a witch.</div>
+                        </div>
+                        <div class="choice-cost">5 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="lightfingered" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Light-fingered</div>
+                            <div class="choice-description">Greatly enhanced dexterity and body control, bordering on superhuman. Good for fighting or lifting a purse or two.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="eyeglasses" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Eyeglasses</div>
+                            <div class="choice-description">These glasses (very rare in this time), grant you the ability to see a brief bio of anyone, including their lord, patron, hometown, and personal history.</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="holyone" value="4" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Holy-one</div>
+                            <div class="choice-description">You gain a natural holy charisma that makes it much easier to convince people you are a prophet. Also gains ability to transform water into wine in small quantities.</div>
+                        </div>
+                        <div class="choice-cost">4 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="noblebearing" value="4" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Noble bearing</div>
+                            <div class="choice-description">You appear to be an exiled noble from a distant land. Anyone you meet will believe this backstory if you offer it.</div>
+                        </div>
+                        <div class="choice-cost">4 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="crafty" value="4" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Crafty</div>
+                            <div class="choice-description">You gain a natural ability to tinker, allowing you to build devices with limited tools.</div>
+                        </div>
+                        <div class="choice-cost">4 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="moretime" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">More time, please</div>
+                            <div class="choice-description">You gain an extra forty years of natural lifespan. Does not make you immune to being killed by disease or other people.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="mediamatters" value="2" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Media matters</div>
+                            <div class="choice-description">You remember with perfect clarity all works of fiction, plays, music, and paintings you have seen. You can recreate them if you'd like.</div>
+                        </div>
+                        <div class="choice-cost">2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="moreallies" value="3" onchange="updatePoints(); toggleAlliesMax()">
+                        <div class="choice-details">
+                            <div class="choice-title">More allies</div>
+                            <div class="choice-description">Pick up to three more allies from the list.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="aware" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Aware</div>
+                            <div class="choice-description">Your senses are enhanced and you have a danger-sense that warns you of impending physical conflict.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="hearthstone" value="3" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Hearthstone</div>
+                            <div class="choice-description">You can set your current location as 'home'. If you focus for a few seconds, you can teleport to this location from anywhere.</div>
+                        </div>
+                        <div class="choice-cost">3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="hygiene" value="4" onchange="updatePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Hygiene</div>
+                            <div class="choice-description">You are always clean and well-groomed. You also gain immunity to diseases.</div>
+                        </div>
+                        <div class="choice-cost">4 Points</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="challenges" class="tab-content">
+            <div class="section">
+                <h2>Challenges</h2>
+                <p>Pick additional challenges to gain extra points</p>
+                
+                <div class="choice-category">
+                    <div class="choice">
+                        <input type="checkbox" id="hunted" value="3" onchange="updateChallengePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Hunted</div>
+                            <div class="choice-description">Chlothar (King of Francs) believes you slept with one of his wives and has ordered his spies to find and kill you.</div>
+                        </div>
+                        <div class="choice-cost">+3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="heretic1" value="3" onchange="updateChallengePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Heretic</div>
+                            <div class="choice-description">The Catholic Church is split between the Nicene orthodoxy and Arianism. Both sides believe you are a missionary of the other faith and can't be convinced otherwise.</div>
+                        </div>
+                        <div class="choice-cost">+3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="heretic2" value="3" onchange="updateChallengePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">New Religion</div>
+                            <div class="choice-description">You must design and spread a new religion, gaining at least 50 coverts within ten years. If you fail, lose 10 points of abilities.</div>
+                        </div>
+                        <div class="choice-cost">+3 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="guild" value="2" onchange="updateChallengePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Guild drama</div>
+                            <div class="choice-description">The guilds of Francia see you as a threat to their monopoly of their trades. They will try to oppose you with gridlock, bribes, and even put a bounty on your head.</div>
+                        </div>
+                        <div class="choice-cost">+2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="friendless" value="2" onchange="updateChallengePoints(); toggleAllies()">
+                        <div class="choice-details">
+                            <div class="choice-title">Friendless</div>
+                            <div class="choice-description">Don't select any allies.</div>
+                        </div>
+                        <div class="choice-cost">+2 Points</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="winter" value="1" onchange="updateChallengePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Winter</div>
+                            <div class="choice-description">Arrive in a snowstorm.</div>
+                        </div>
+                        <div class="choice-cost">+1 Point</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="combat" value="1" onchange="updateChallengePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Combat</div>
+                            <div class="choice-description">Within the first five years of arriving, you must take part in combat.</div>
+                        </div>
+                        <div class="choice-cost">+1 Point</div>
+                    </div>
+                    
+                    <div class="choice">
+                        <input type="checkbox" id="noncombatant" value="1" onchange="updateChallengePoints()">
+                        <div class="choice-details">
+                            <div class="choice-title">Non-combatant</div>
+                            <div class="choice-description">Avoid any physical confrontation for first ten years. If attacked, can only try to escape.</div>
+                        </div>
+                        <div class="choice-cost">+1 Point</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="allies" class="tab-content">
+            <div class="section">
+                <h2>Allies</h2>
+                <p>Pick up to <span id="max-allies">3</span> allies to support you</p>
+                <div id="ally-counter">Selected: 0/3</div>
+                
+                <div class="choice-category" id="allies-list">
+                    <div class="ally">
+                        <input type="checkbox" id="gregory" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Gregory of Tours</div>
+                            <div class="ally-location">Tours</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Born into a noble family, he is a historian and devout believer in Nicene Christianity. Currently a priest, he is on track to become a bishop in the future.</div>
+                            <div><span class="ally-label">Personality:</span> Deeply religious but academic</div>
+                            <div><span class="ally-label">Skillset:</span> Able to support you in religious affairs and has connections to many Frankish nobles.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ally">
+                        <input type="checkbox" id="radegund" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Radegund</div>
+                            <div class="ally-location">Poitiers</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Born a princess of Thuringia, when Chlothar conquered the land he took her as his wife. A religious woman, she focused on almsgiving much to Chlothar's annoyance. When he had her brother killed (last heir of Thuringia), Radegund fled to the Church and persuaded the Bishop of Noyon to ordain her, allowing her to found a monastery for the infirm.</div>
+                            <div><span class="ally-label">Personality:</span> Radegund was known for her ascetic behavior and has been described as an "extreme ascetic". She followed a vegan diet and abstained from wine, mead and beer.</div>
+                            <div><span class="ally-label">Skillset:</span> She will provide you will a breakdown of the royal court, support from her abbey, and correspondence on church matters. She also is well-known by the people and her support has influence.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="ally">
+                        <input type="checkbox" id="brunhilda" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Brunhilda</div>
+                            <div class="ally-location">Her entourage is traveling to Paris when you encounter her</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> A Visigoth princess, the younger of the two daughters of Athanagild and Goiswintha. She was educated in Toledo as an Arian Christian. She is set to be wed to Chlothar's son Sigebert.</div>
+                            <div><span class="ally-label">Personality:</span> Known for her education and forceful personality, she aims to have influence at court.</div>
+                            <div><span class="ally-label">Skillset:</span> She might give you an in with the King or advise you on politics.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- More allies here -->
+                    <div class="ally">
+                        <input type="checkbox" id="alcuin" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Alcuin</div>
+                            <div class="ally-location">Nearby abbey</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Young Nicene monk from an abbey nearby. He is literate in Latin and a diligent copier of older texts.</div>
+                            <div><span class="ally-label">Personality:</span> Bookish but easy-going</div>
+                            <div><span class="ally-label">Skillset:</span> He would make a great administrator</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Remaining allies -->
+                    <!-- You can add more allies from the document as needed -->
+                </div>
+            </div>
+        </div>
+
+        <div id="summary" class="tab-content">
+            <div class="section">
+                <h2>Your Build Summary</h2>
+                <div class="summary">
+                    <h3>Selected Choices</h3>
+                    <ul class="summary-list" id="summary-list">
+                        <!-- Summary will be populated by JavaScript -->
+                    </ul>
+                    <h3>Total Points Spent: <span id="total-spent">0</span>/20</h3>
+                    <h3>Challenge Points: <span id="total-challenge-points">0</span></h3>
+                    <h3>Selected Allies: <span id="ally-summary">None</span></h3>
+                </div>
+                <button id="finalize-build">Embark on Your Journey</button>
+            </div>
+        </div>
+
+        <footer>
+            <p>Your Herculean task is to stop the decline, restart the engine of progress, and uplift society. Good luck!</p>
+        </footer>
+    </div>
+
+    <script>
+        // JavaScript to handle tab switching
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
+        // JavaScript to handle points and selections
+        let pointsSpent = 0;
+        let challengePoints = 0;
+        let selectedAllies = 0;
+        let maxAllies = 3;
+
+        function updatePoints() {
+            let total = 0;
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]:not([id^="heretic"]):not([id="hunted"]):not([id="guild"]):not([id="friendless"]):not([id="winter"]):not([id="combat"]):not([id="noncombatant"]):checked');
+            
+            checkboxes.forEach(checkbox => {
+                total += parseInt(checkbox.value || 0);
+            });
+            
+            pointsSpent = total;
+            document.getElementById('points-spent').textContent = `Points Spent: ${pointsSpent}`;
+            document.getElementById('points-available').textContent = `Points Available: ${20 + challengePoints - pointsSpent}`;
+            
+            updateSummary();
+        }
+
+        function updateChallengePoints() {
+            let total = 0;
+            const checkboxes = document.querySelectorAll('input[id="heretic1"]:checked, input[id="heretic2"]:checked, input[id="hunted"]:checked, input[id="guild"]:checked, input[id="friendless"]:checked, input[id="winter"]:checked, input[id="combat"]:checked, input[id="noncombatant"]:checked');
+            
+            checkboxes.forEach(checkbox => {
+                total += parseInt(checkbox.value || 0);
+            });
+            
+            challengePoints = total;
+            document.getElementById('challenges-points').textContent = `Challenge Points: ${challengePoints}`;
+            document.getElementById('points-available').textContent = `Points Available: ${20 + challengePoints - pointsSpent}`;
+            
+            updateSummary();
+        }
+
+        function toggleAllies() {
+            const friendlessChecked = document.getElementById('friendless').checked;
+            const alliesTab = document.querySelector('.tab[onclick="openTab(event, \'allies\')"]');
+            const allyInputs = document.querySelectorAll('#allies-list input[type="checkbox"]');
+            
+            if (friendlessChecked) {
+                alliesTab.disabled = true;
+                allyInputs.forEach(input => {
+                    input.checked = false;
+                    input.disabled = true;
+                });
+                selectedAllies = 0;
+                document.getElementById('ally-counter').textContent = `Selected: 0/${maxAllies}`;
+            } else {
+                alliesTab.disabled = false;
+                allyInputs.forEach(input => {
+                    input.disabled = false;
+                });
+            }
+            
+            updateSummary();
+        }
+
+        function toggleAlliesMax() {
+            const moreAlliesChecked = document.getElementById('moreallies').checked;
+            if (moreAlliesChecked) {
+                maxAllies = 6;
+            } else {
+                maxAllies = 3;
+            }
+            document.getElementById('max-allies').textContent = maxAllies;
+            document.getElementById('ally-counter').textContent = `Selected: ${selectedAllies}/${maxAllies}`;
+        }
+
+        function updateAllies() {
+            const allyCheckboxes = document.querySelectorAll('#allies-list input[type="checkbox"]:checked');
+            selectedAllies = allyCheckboxes.length;
+            
+            if (selectedAllies > maxAllies) {
+                // Uncheck the last checked box
+                this.checked = false;
+                selectedAllies--;
+            }
+            
+            document.getElementById('ally-counter').textContent = `Selected: ${selectedAllies}/${maxAllies}`;
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const summaryList = document.getElementById('summary-list');
+            summaryList.innerHTML = '';
+            
+            // Add benefits
+            document.querySelectorAll('#benefits input[type="checkbox"]:checked').forEach(checkbox => {
+                const title = checkbox.parentElement.querySelector('.choice-title').textContent;
+                const cost = checkbox.value;
+                const li = document.createElement('li');
+                li.textContent = `${title} (${cost} points)`;
+                summaryList.appendChild(li);
+            });
+            
+            // Add knowledge
+            document.querySelectorAll('#knowledge input[type="checkbox"]:checked').forEach(checkbox => {
+                const title = checkbox.parentElement.querySelector('.choice-title').textContent;
+                const cost = checkbox.value;
+                const li = document.createElement('li');
+                li.textContent = `${title} (${cost} points)`;
+                summaryList.appendChild(li);
+            });
+            
+            // Add skills
+            document.querySelectorAll('#skills input[type="checkbox"]:checked').forEach(checkbox => {
+                const title = checkbox.parentElement.querySelector('.choice-title').textContent;
+                const cost = checkbox.value;
+                const li = document.createElement('li');
+                li.textContent = `${title} (${cost} points)`;
+                summaryList.appendChild(li);
+            });
+            
+            // Add challenges
+            document.querySelectorAll('#challenges input[type="checkbox"]:checked').forEach(checkbox => {
+                const title = checkbox.parentElement.querySelector('.choice-title').textContent;
+                const cost = checkbox.value;
+                const li = document.createElement('li');
+                li.textContent = `${title} (+${cost} points)`;
+                summaryList.appendChild(li);
+            });
+            
+            // Update totals
+            document.getElementById('total-spent').textContent = pointsSpent;
+            document.getElementById('total-challenge-points').textContent = challengePoints;
+            
+            // Update allies summary
+            const allySummary = document.getElementById('ally-summary');
+            if (document.getElementById('friendless') && document.getElementById('friendless').checked) {
+                allySummary.textContent = "None (Friendless challenge)";
+            } else {
+                const selectedAllyNames = [];
+                document.querySelectorAll('#allies-list input[type="checkbox"]:checked').forEach(checkbox => {
+                    selectedAllyNames.push(checkbox.parentElement.querySelector('.ally-name').textContent);
+                });
+                
+                if (selectedAllyNames.length > 0) {
+                    allySummary.textContent = selectedAllyNames.join(', ');
+                } else {
+                    allySummary.textContent = "None selected";
+                }
+            }
+        }
+
+        // Initialize everything
+        document.getElementById('finalize-build').addEventListener('click', function() {
+            if (pointsSpent > 20 + challengePoints) {
+                alert("You've spent more points than available. Please adjust your choices.");
+                return;
+            }
+            
+            if (!document.getElementById('friendless').checked && selectedAllies === 0) {
+                alert("Please select at least one ally or take the Friendless challenge.");
+                return;
+            }
+            
+            alert("Your journey into the past begins now! Good luck uplifting the Frankish Kingdom!");
+        });
+    </script>
+</body>
+</html>
