@@ -11,13 +11,17 @@
             margin: 0;
             padding: 0;
             background-color: #f5f1e8;
+            background-image: url('frankish.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
             color: #333;
         }
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: #f6fbff;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 5px;
         }
@@ -43,7 +47,6 @@
             font-style: italic;
             background-color: #efe8d9;
             padding: 15px;
-            border-left: 5px solid #8d6e63;
             margin-bottom: 20px;
         }
         .section {
@@ -192,6 +195,11 @@
             font-style: italic;
             color: #5d4037;
         }
+        img.full-width {
+          width: 100%;
+          height: auto; /* Maintain aspect ratio */
+          display: block; /* Removes small whitespace under image */
+        }
         footer {
             text-align: center;
             margin-top: 30px;
@@ -221,6 +229,7 @@
 
         <div class="introduction">
             <p>You blink and find yourself on a grassy, windswept hill overlooking the northern Atlantic sea. A magical interface appears before you with a list of options.</p>
+            <img src="wind_hill.png" class="full-width">
             <p>Welcome to the Kingdom of the Francs. The date is 550 AD. Known as one of the few times civilization regressed, the trifecta of famine, disease, and roving tribes have destroyed the Western Roman Empire. After the volcanic eruptions of 536 blocked out the sun and plunged the world in famine, the plague of Justinian wiped out 40% of the remaining population in the resulting chaos.</p>
             <p>The political situation is also tumultuous—despite King Chlothar 'the old' defeating his brothers and unifying the Kingdom of the Francs, he is ailing and his sons are scheming for control. The Catholic Church is split between the Nicene orthodoxy and Arianism, with much zealous preaching of end-times.</p>
             <p>Your Herculean task is to stop the decline, restart the engine of progress, and uplift society. To do this, you are granted a number of supernatural skills.</p>
@@ -632,6 +641,7 @@
             <div class="section">
                 <h2>Allies</h2>
                 <p>Pick up to <span id="max-allies">3</span> allies to support you</p>
+                <img src="allies.png" class="full-width">
                 <div id="ally-counter">Selected: 0/3</div>
                 
                 <div class="choice-category" id="allies-list">
@@ -688,8 +698,226 @@
                         </div>
                     </div>
                     
-                    <!-- Remaining allies -->
-                    <!-- You can add more allies from the document as needed -->
+                    <div class="ally">
+                        <input type="checkbox" id="ramigil" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Ramigil</div>
+                            <div class="ally-location">Tavern in nearby town</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Mercenary fighter originally from Alamati tribe</div>
+                            <div><span class="ally-label">Personality:</span> Gruff and rowdy, a veteran who doesn't shy from danger</div>
+                            <div><span class="ally-label">Skillset:</span> Fighting, tactics, and drinking</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="meriwig" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Meriwig</div>
+                            <div class="ally-location">Nearby city</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Daughter of a wealthy merchant, pestered her father and now runs a lot of his business behind the scenes</div>
+                            <div><span class="ally-label">Personality:</span> Curious and ambitious</div>
+                            <div><span class="ally-label">Skillset:</span> Contacts in business, literate, strong accountant, good at math</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="adald" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Adald</div>
+                            <div class="ally-location">Patrol nearby</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Noble bastard who became a knight</div>
+                            <div><span class="ally-label">Personality:</span> Lawful good—believes in a life of duty, honor, and charity</div>
+                            <div><span class="ally-label">Skillset:</span> Good fighter, good trainer</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="wulmar" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Wulmar</div>
+                            <div class="ally-location">Town square nearby</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> A fire-and-brimstone Arian preacher, he travels from town to town to speak and convert</div>
+                            <div><span class="ally-label">Personality:</span> Zealous and charismatic but surprisingly practical</div>
+                            <div><span class="ally-label">Skillset:</span> Good at conversions, good at escaping the law when Nicene forces run him out of town</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="theoda" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Theoda</div>
+                            <div class="ally-location">Nearby city</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> A baker's daughter</div>
+                            <div><span class="ally-label">Personality:</span> Sweet and diligent</div>
+                            <div><span class="ally-label">Skillset:</span> Good baker, cook, and good at making friends</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="narduin" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Narduin</div>
+                            <div class="ally-location">Nearby city</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Blacksmith</div>
+                            <div><span class="ally-label">Personality:</span> Town joker, always ready with a clever joke</div>
+                            <div><span class="ally-label">Skillset:</span> Armor, weapons, horseshoes, and other smith work</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="marcian" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Marcian</div>
+                            <div class="ally-location">Paris</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Byzantine merc</div>
+                            <div><span class="ally-label">Personality:</span> Stoic and professional</div>
+                            <div><span class="ally-label">Skillset:</span> Fighting, training men-at-arms, and an experienced logician</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="bertrude" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Bertrude</div>
+                            <div class="ally-location">Treves (city)</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Leader of co-fraternity in Treves (this is like a guild but organized with church support)</div>
+                            <div><span class="ally-label">Personality:</span> Charismatic and a networker</div>
+                            <div><span class="ally-label">Skillset:</span> Organization, managing egos, advocating for his workers</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="irene" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Irene</div>
+                            <div class="ally-location">Paris</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Byzantine craftswoman whose family fled during the plague. She and her old uncle are the only ones who survived the trip, so she set up a jewelry shop.</div>
+                            <div><span class="ally-label">Personality:</span> Entrepreneurial and savvy</div>
+                            <div><span class="ally-label">Skillset:</span> Running a business, educated, and worldly</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="eadmod" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Eadmod</div>
+                            <div class="ally-location">On the road between two cities</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Traveling tinker for metal, brother of Rowena</div>
+                            <div><span class="ally-label">Personality:</span> Clever and opportunistic</div>
+                            <div><span class="ally-label">Skillset:</span> Good bargainer, able to make devices and repair equipment</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="rowena" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Rowena</div>
+                            <div class="ally-location">On the road between two cities</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Traveling tinker for cloth, sister of Eadmod</div>
+                            <div><span class="ally-label">Personality:</span> Mediative and laid back</div>
+                            <div><span class="ally-label">Skillset:</span> Knows many cloth techniques, well traveled</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="stadius" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Stadius</div>
+                            <div class="ally-location">Frontier with Germany</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Roman missionary</div>
+                            <div><span class="ally-label">Personality:</span> Not specified</div>
+                            <div><span class="ally-label">Skillset:</span> Not specified</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="otton" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Otton</div>
+                            <div class="ally-location">Paris</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Tutor of lords, he is brought in to teach nobles etiquette, literature, and academics</div>
+                            <div><span class="ally-label">Personality:</span> Arrogant and detail-focused</div>
+                            <div><span class="ally-label">Skillset:</span> Well educated teacher, lots of contacts with nobility</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="richomer" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Richomer</div>
+                            <div class="ally-location">Nearby city</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Skilled mason</div>
+                            <div><span class="ally-label">Personality:</span> Dreams of building a castle, imaginative</div>
+                            <div><span class="ally-label">Skillset:</span> Knows medieval techniques for stone building</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="grifo" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Grifo</div>
+                            <div class="ally-location">Nearby city</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Glass worker</div>
+                            <div><span class="ally-label">Personality:</span> Cares deeply about precision and quality of his work</div>
+                            <div><span class="ally-label">Skillset:</span> Knows glass techniques and has taken apprentices before</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="gerald" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Gerald</div>
+                            <div class="ally-location">Nearby city</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> Horse trader from Anglo-saxon England</div>
+                            <div><span class="ally-label">Personality:</span> Loves chasing a good deal and unafraid of conflict</div>
+                            <div><span class="ally-label">Skillset:</span> Bargainer of great skill, knows how to evaluate and train horses</div>
+                        </div>
+                    </div>
+
+                    <div class="ally">
+                        <input type="checkbox" id="sigburta" onchange="updateAllies()">
+                        <div class="ally-header">
+                            <div class="ally-name">Sigburta</div>
+                            <div class="ally-location">Nearby town</div>
+                        </div>
+                        <div class="ally-details">
+                            <div><span class="ally-label">Background:</span> After her husband died young, she now runs the local tavern</div>
+                            <div><span class="ally-label">Personality:</span> Admired and sought after for her beauty and tavern, she has developed a hardened shell</div>
+                            <div><span class="ally-label">Skillset:</span> Running a tavern means knowing how to handle money, hire and train staff, and prepare food and rooms</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -876,6 +1104,69 @@
                 }
             }
         }
+
+        // First, let's add a function to handle clicks on the choice divs
+        function makeChoicesClickable() {
+          // For all choice divs (benefits, knowledge, skills, challenges)
+          document.querySelectorAll('.choice').forEach(choice => {
+            choice.style.cursor = 'pointer'; // Change cursor to pointer to indicate clickability
+            
+            // Add click event listener to the whole div
+            choice.addEventListener('click', function(e) {
+              // Find the checkbox within this div
+              const checkbox = this.querySelector('input[type="checkbox"]');
+              
+              // Only toggle if we didn't directly click on the checkbox
+              // (to avoid double-toggling when clicking directly on checkbox)
+              if (e.target !== checkbox) {
+                checkbox.checked = !checkbox.checked;
+                
+                // Trigger the appropriate update function based on the checkbox type
+                if (checkbox.id.startsWith('heretic') || checkbox.id === 'hunted' || 
+                    checkbox.id === 'guild' || checkbox.id === 'friendless' || 
+                    checkbox.id === 'winter' || checkbox.id === 'combat' || 
+                    checkbox.id === 'noncombatant') {
+                  updateChallengePoints();
+                } else {
+                  updatePoints();
+                }
+                
+                // Handle special cases
+                if (checkbox.id === 'friendless') {
+                  toggleAllies();
+                }
+                if (checkbox.id === 'moreallies') {
+                  toggleAlliesMax();
+                }
+              }
+            });
+          });
+          
+          // Also make allies clickable
+          document.querySelectorAll('.ally').forEach(ally => {
+            ally.style.cursor = 'pointer';
+            
+            ally.addEventListener('click', function(e) {
+              const checkbox = this.querySelector('input[type="checkbox"]');
+              
+              // Only toggle if we didn't directly click on the checkbox
+              if (e.target !== checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateAllies();
+              }
+            });
+          });
+        }
+
+        // Call this function when the document is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+          makeChoicesClickable();
+          
+          // Initialize other values
+          updatePoints();
+          updateChallengePoints();
+          updateAllies();
+        });
 
         // Initialize everything
         document.getElementById('finalize-build').addEventListener('click', function() {
